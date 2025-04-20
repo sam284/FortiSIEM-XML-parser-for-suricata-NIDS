@@ -1,0 +1,30 @@
+<patternDefinitions>
+<pattern name="patHostName"><![CDATA[\S+]]></pattern>
+<pattern name="patAppName"><![CDATA[\S+]]></pattern>
+<pattern name="patSuricataDateTime"><![CDATA[\d{2}\/\d{2}\/\d{4}-\d{2}:\d{2}:\d{2}\.\d{6}]]></pattern>
+<pattern name="patAlertId"><![CDATA[\d+]]></pattern>
+<pattern name="patAlertMsg"><![CDATA[.*?]]></pattern>
+<pattern name="patClassification"><![CDATA[.*?]]></pattern>
+<pattern name="patPriority"><![CDATA[\[Priority: \d+\]]]></pattern>
+<pattern name="patProto"><![CDATA[\w+|\w+\-\w+]]></pattern>
+<pattern name="patIpAddr"><![CDATA[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}]]></pattern>
+<pattern name="patPort"><![CDATA[\d+]]></pattern>
+</patternDefinitions>
+<eventFormatRecognizer><![CDATA[<\d+>[A-Za-z]{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}\s+\S+\s+suricata]]></eventFormatRecognizer>
+<parsingInstructions>
+<collectFieldsByRegex src="$_rawmsg">
+<regex><![CDATA[<:gPatSyslogPRI>\s*<_mon:gPatMon>\s*<_day:gPatDay>\s*<_time:gPatTime>\s+<_hostname:patHostName>\s+<_app:patAppName>\s+<_suricata_date_time:patSuricataDateTime>\s*\[\*\*\]\s*\[\d+?:<_sid:patAlertId>:\d+?\]\s+<_alert_msg:patAlertMsg>\s+\[\*\*\]\s+\[Classification\:<_classification:patClassification>\]\s+<_priority:patPriority>\s+\{<_proto:patProto>\}\s+<_src_ip:patIpAddr>:<_src_port:patPort>\s+->\s+<_dest_ip:patIpAddr>:<_dest_port:patPort>]]></regex>
+</collectFieldsByRegex>
+<setEventAttribute attr="srcIpAddr">$_src_ip</setEventAttribute>
+<setEventAttribute attr="destIpAddr">$_dest_ip</setEventAttribute>
+<setEventAttribute attr="srcIpPort">$_src_port</setEventAttribute>
+<setEventAttribute attr="destIpPort">$_dest_port</setEventAttribute>
+<setEventAttribute attr="ipProto">$_proto</setEventAttribute>
+<setEventAttribute attr="sid">$_sid</setEventAttribute>
+<setEventAttribute attr="appName">$_app</setEventAttribute>
+<setEventAttribute attr="hostName">$_hostname</setEventAttribute>
+<setEventAttribute attr="eventDesc">$_alert_msg</setEventAttribute>
+<setEventAttribute attr="classification">$_classification</setEventAttribute>
+<setEventAttribute attr="eventType">suricata-alert</setEventAttribute>
+<setEventAttribute attr="eventName">$_alert_msg</setEventAttribute>
+</parsingInstructions>
