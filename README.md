@@ -8,4 +8,4 @@ Navigate to ADMIN -> Device Support -> Event Attributes to add new Event attribu
 
 As a suggestion, consider adding the Event SID (generally useful for investigating Suricata alerts) and Classification attributes (for dashboard usage and visualization).
 
-Navigate to ADMIN -> Device Support -> Parsers and add a new Parser. The following is an example parser for Suricata written in XML format:
+Navigate to ADMIN -> Device Support -> Parsers and add a new Parser.
